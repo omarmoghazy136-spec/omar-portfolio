@@ -1,5 +1,4 @@
 
-
 document.addEventListener("DOMContentLoaded", function () {
     const sections = document.querySelectorAll("section[id]");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -41,31 +40,55 @@ document.addEventListener("DOMContentLoaded", function () {
     const statusBox = document.getElementById("form-status");
 
     if (contactForm) {
-        contactForm.addEventListener("submit", function (event) {
+        const EMAILJS_SERVICE_ID = "service_rgdz9i9";
+        const EMAILJS_TEMPLATE_ID = "template_0tm8lg5";
+        const EMAILJS_PUBLIC_KEY = "3zIB1NkKaIBQ9-aDJ";
+
+        contactForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const name = document.getElementById("name")?.value.trim();
-            const email = document.getElementById("email")?.value.trim();
-            const subject = document.getElementById("subject")?.value.trim();
-            const message = document.getElementById("message")?.value.trim();
-
-            if (!name || !email || !subject || !message) {
+            if (!window.emailjs) {
                 if (statusBox) {
-                    statusBox.textContent = "Please fill in all fields first.";
+                    statusBox.textContent = "Email service could not be loaded. Please try again later.";
                     statusBox.style.color = "#f9d976";
                 }
                 return;
             }
 
-            const mailtoLink = `mailto:omarmoghazy136@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
-            window.location.href = mailtoLink;
-
             if (statusBox) {
-                statusBox.textContent = "Your email app is opening. Thanks for the message!";
+                statusBox.textContent = "Sending your message...";
                 statusBox.style.color = "#7dd3fc";
             }
 
-            contactForm.reset();
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+
+            try {
+                window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+                await window.emailjs.sendForm(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    contactForm
+                );
+
+                if (statusBox) {
+                    statusBox.textContent = "Your message was sent successfully. Thank you!";
+                    statusBox.style.color = "#7dd3fc";
+                }
+                contactForm.reset();
+            } catch (error) {
+                console.error("EmailJS could not send the contact form:", error);
+                if (statusBox) {
+                    statusBox.textContent = "Sorry, your message could not be sent. Please try again later.";
+                    statusBox.style.color = "#f9d976";
+                }
+            } finally {
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
+            }
         });
     }
 });
