@@ -19,6 +19,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    const navbarCollapse = document.getElementById("navbarDrawer");
+
+navLinks.forEach(function (link) {
+    link.addEventListener("click", function () {
+      if (navbarCollapse.classList.contains("show")) {
+        const bsCollapse =
+          bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
+        bsCollapse.hide();
+      }
+    });
+  });
+
     const revealItems = document.querySelectorAll(".reveal");
     const observer = new IntersectionObserver(
         (entries) => {
