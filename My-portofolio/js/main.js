@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
         { threshold: 0.15 }
     );
 
-    document.addEventListener("DOMContentLoaded", function () {
   // navbar collapse issue handling
   const navbarCollapse = document.getElementById("navbarSupportedContent");
   const navLinks = navbarCollapse.querySelectorAll(".nav-link");
