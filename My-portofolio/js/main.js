@@ -32,6 +32,22 @@ document.addEventListener("DOMContentLoaded", function () {
         { threshold: 0.15 }
     );
 
+    document.addEventListener("DOMContentLoaded", function () {
+  // navbar collapse issue handling
+  const navbarCollapse = document.getElementById("navbarSupportedContent");
+  const navLinks = navbarCollapse.querySelectorAll(".nav-link");
+
+  navLinks.forEach(function (link) {
+    link.addEventListener("click", function () {
+      if (navbarCollapse.classList.contains("show")) {
+        const bsCollapse =
+          bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
+        bsCollapse.hide();
+      }
+    });
+  });
+
+
     revealItems.forEach((item) => observer.observe(item));
     updateActiveLink();
     window.addEventListener("scroll", updateActiveLink, { passive: true });
